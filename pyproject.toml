@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "silicon-char-bench"
+version = "0.2.0"
+description = "Automated silicon characterization bench for RP2040/RP2350"
+requires-python = ">=3.10"
+dependencies = [
+    "pyyaml>=6.0",
+    "pyserial>=3.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+bench-soak = "bench.soak:main"
+
+[tool.setuptools]
+packages = ["bench", "bench.instruments"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]

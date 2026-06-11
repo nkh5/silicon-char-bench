@@ -1,0 +1,36 @@
+# Session 1 done-gate: lint + mocked unit suite, green with zero hardware.
+# Hardware-in-the-loop results are committed artifacts labeled "locally
+# measured"; they are never simulated in CI.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check .
+      - name: Unit tests (mocked instruments)
+        run: pytest
+
+  firmware-host-selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run workload kernel self-test
+        run: |
+          gcc -std=c11 -Wall -Wextra -Werror -O2 -o test_workloads \
+            firmware/host_test/test_workloads.c firmware/payload/workloads.c
+          ./test_workloads

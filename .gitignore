@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+firmware/build/
+*.uf2
+*.elf
+*.bin
+results/*.sqlite
+.venv/
+venv/

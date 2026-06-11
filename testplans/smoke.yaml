@@ -1,0 +1,19 @@
+# Zero-hardware smoke plan: exercised by the unit suite and CI to prove the
+# loader, grid expansion, and campaign schema before any silicon is touched.
+name: smoke
+description: Framework smoke plan; grids are coarse placeholders for session 3.
+campaigns:
+  - id: shmoo_rp2040_coarse
+    workload: march
+    spec_ref: "RP2040 datasheet, core voltage regulator (software settable 0.85-1.30 V)"
+    pass_criterion: "Workload reports PASS and DUT heartbeats within 2 s at every grid point"
+    grid:
+      core_mv: {start: 850, stop: 1300, step: 150}
+      sys_clk_mhz: {start: 125, stop: 275, step: 50}
+
+  - id: crc_soak
+    workload: crc
+    spec_ref: "CRC-32/ISO-HDLC, check value 0xCBF43926 for '123456789'"
+    pass_criterion: "Reported CRC equals host-computed reference for 100 consecutive cycles"
+    params:
+      cycles: 100
